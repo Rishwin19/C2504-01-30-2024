@@ -1,0 +1,16 @@
+17 .to check number is odd or even
+
+function IsOddorEven(number)
+    if(num % 2 == 0) 
+        return true;
+    else
+        return false;
+
+
+function TestIsOddorEven()
+{
+    if IsOddorEven(number)
+        printf("Even");
+    else
+        print("Odd");
+}
