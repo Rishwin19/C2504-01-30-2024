@@ -1,1 +1,16 @@
+9. to swap two numbers.
+
+	pseudo : Routine
+		function SwapNumbers(number1 , number2)
+		temp = number1
+		number1 = number 2
+		number2 = temp
+		return number1 , number2
+	
+	pseudo : Routine Test
+		function TestSwapNumbers()
+			input number1
+			input number2
+			SwapNumbers(number1 , number2)
+			print "afterswap" number 1 = number1 , number 2 = number2	
 
