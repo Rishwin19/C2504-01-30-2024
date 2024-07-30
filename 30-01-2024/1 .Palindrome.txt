@@ -19,7 +19,7 @@
 	pseudo : Routine Test
 		function TestIsPalindrome(string)
 			input string
-			if IsDivisibleBy27(num)
+			if IsPalindrome(num)
             			print "is palindrome"
         		else 
            			print "not palindrome"
