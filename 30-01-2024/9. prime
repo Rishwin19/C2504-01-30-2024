@@ -1,0 +1,18 @@
+9. to check a number prime.
+
+	pseudo : Routine
+		function IsPrime(number)
+			for(i =2; i < n ; i++)
+			 	{ 
+				  if(n % i == 0)
+				  return false;
+				}
+			return true;
+	
+	pseudo : Routine Test
+		function IsPrime(number)
+			input number
+			if IsPrime(number)
+				print "is prime"
+			else
+				print "not prime"
