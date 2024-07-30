@@ -1,0 +1,17 @@
+function IsPerfectNUmber(number)
+    int sum;
+    for( int i=1 ; i<=number ; i++)
+    {
+        if(number % i) == 0;
+        sum = sum + i;
+        return sum;
+    }
+
+
+function TestIsPerfectNUmber()
+{
+    if (sum == number)
+        printf("perfect")
+    else
+        print("not perfect")
+}
