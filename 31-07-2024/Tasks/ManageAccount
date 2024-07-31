@@ -1,0 +1,22 @@
+int choice;
+double balance;
+decimal amount;
+switch(choice)
+{
+	case '1': balance = balance + amount;
+		  break;
+
+	case '2': balance = balance - amount;
+		  break;
+
+	case '3': ShowBalance(balance);
+		  break;
+}
+	return balance;
+
+
+
+function ShowBalance()
+{
+	print balance
+}
