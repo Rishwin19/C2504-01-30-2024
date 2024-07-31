@@ -1,0 +1,14 @@
+function CalculateTotalPrice() 
+	double total = 0.0
+    	total = total + (item_1_price * item_1_quantity)
+    	total = total + (item_2_price * item_2_quantity)
+    	total = total + (item_3_price * item_3_quantity)
+    	RETURN total
+end function
+
+function CalculateDiscount()
+	double discount = 0.0
+	if(total > 1000)
+		{
+			discount = (total * 25) / 100;
+			total = total - discount;
