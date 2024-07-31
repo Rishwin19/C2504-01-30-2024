@@ -1,0 +1,16 @@
+1. to check a number is palindrome or not.
+
+	pseudo : Routine
+		function IsPalindrome(string)
+		int start = 0
+		int length - set length strlen(string)
+		while(start < length) 
+		{
+			if string[start] != string[length] 
+				return False
+			end ++
+			length --
+			
+
+		return True
+		}
