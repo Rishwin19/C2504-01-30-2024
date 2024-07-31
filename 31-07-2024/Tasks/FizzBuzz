@@ -1,0 +1,19 @@
+
+int number;
+
+if(number % 3 == 0)
+{
+	if(number % 5 == 0)
+	{	
+		print fizzBuzz
+	}
+	else
+	{
+		print fizz
+	}
+}
+
+if(number % 5 == 0)
+{
+	print buzz
+}
