@@ -1,0 +1,32 @@
+    internal class Program
+    {
+        static bool IsDoctorSalaryMin6Digits(int doctorSalary) //Ann Mariya version
+        {
+            return doctorSalary >= 100000;
+        }
+
+        static void TestIsDoctorSalaryMin6Digits()
+        {
+            Console.Write("Number of Docters");
+            int limit = int.Parse(Console.ReadLine());
+
+            for (int i = 0; i < limit; i++)
+            {
+                Console.WriteLine($"Enter the docter salary");
+                int doctorSalary = int.Parse(Console.ReadLine());
+
+                if (IsDoctorSalaryMin6Digits(doctorSalary))
+                {
+                    Console.WriteLine("Doctor gets 6 digits salary");
+                }
+            }
+
+            
+
+        }
+        static void Main(string[] args)
+        {
+            TestIsDoctorSalaryMin6Digits();            
+        }
+    }
+}
