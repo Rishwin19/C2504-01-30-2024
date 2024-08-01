@@ -1,6 +1,6 @@
     internal class Program
     {
-        static bool IsDoctorSalaryMin6Digits(int doctorSalary) //Ann Mariya version
+        static bool IsDoctorSalaryMin6Digits(int doctorSalary)
         {
             return doctorSalary >= 100000;
         }
