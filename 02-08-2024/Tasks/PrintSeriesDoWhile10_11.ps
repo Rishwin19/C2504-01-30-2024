@@ -1,0 +1,18 @@
+function PrintSeries(numberOfTerms)
+    {
+        start = 10;
+        i = 0;
+        do
+        {   
+            Console.WriteLine($"{start += i}");
+             i++;
+        }
+        while (i <= numberOfTerms);
+    }
+
+function TestSeries()
+{
+    input numberOfTerms;
+    PrintSeries(numberOfTerms);
+
+}
