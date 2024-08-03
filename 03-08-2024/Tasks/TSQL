@@ -1,0 +1,60 @@
+--to create a database named trainer_search_db
+CREATE DATABASE trainer_search_db;
+--created database named tariner_search_db
+
+
+--to switch from main_db to trainer_db
+USE trainer_search_db;
+--switched from main_db to trainer_db
+
+
+--to create a table named trainer with id, name, skill, place
+CREATE TABLE trainer(
+	id integer primary key identity(1,1),
+	name varchar(255) not null,
+	skill varchar(512),
+	place varchar(126),
+);
+--to create a table named trainer with id, name, skill, place
+
+--to see about table
+sp_help trainer;
+
+--to display rows in table trainer
+SELECT * FROM trainer;
+
+--insert rows to the table trainer 
+INSERT INTO trainer(name, skill, place) VALUES('mahesh', 'c#', 'mysore');
+
+--inser anaother tariner into table
+INSERT INTO trainer(name, skill, place) 
+	VALUES('gopal', 'c#', 'trivandrum'),
+		  ('sanjay', 'management', 'trivandrum'),
+		  ('mishel', 'wpf', 'idukki');
+
+SELECT * FROM trainer;
+
+--to delete rows
+DELETE FROM trainer WHERE id = 7;
+
+--delete with IN
+DELETE FROM trainer WHERE id IN (2,3);
+
+--to search for trainers with c# and wpf
+SELECT name, skill FROM trainer WHERE id IN (1,4);
+
+--
+
+SELECT * FROM trainer WHERE id =7;
+UPDATE trainer
+SET skill = 'WPF and c#'
+WHERE id IN (1,4);
+
+--update two coloums
+UPDATE trainer
+SET name ='Mahesh', place = 'Mysore'
+WHERE id IN(1,4);
+--
+UPDATE trainer 
+SET name = 'Mishel', place = 'Idukki', skill = 'C# and WPF'
+WHERE id = 7;
