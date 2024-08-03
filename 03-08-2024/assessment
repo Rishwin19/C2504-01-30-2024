@@ -1,0 +1,95 @@
+namespace ConsoleApp2
+{
+    internal class Program
+    {
+        static int FindaAvgAges(int age, int average)
+        {
+            average += age;
+            return (average);
+            
+        }
+        static int FindTeenAvg(int age, int teenAgeSum)
+        {
+            if(age < 18)
+            {
+                teenAgeSum += age;
+            }
+            return (teenAgeSum);
+        }
+        static int FindOddAvg(int age, int teenOddAvg)
+        {
+            int oddCount = 0;
+            if (age % 2 != 0)
+            {
+                teenOddAvg += age;
+                oddCount += 1;           
+            }
+            return (teenOddAvg);
+        }
+        static int FindPrimeAge(int age, int primeAge)
+        {
+            int flag = 0;
+            for (int i = 2; i <= (age / 2) + 1; i++)
+            {
+                if (age % i == 0)
+                {
+                    break;
+                }
+                else
+                {
+                    flag = 1;
+                }
+            
+            }
+            if (flag == 1)
+            {
+                primeAge += age;
+            }
+
+
+
+            return (primeAge);
+        }
+        static int FindMinAge(int age, int small)
+        {
+            if(age < small)
+            {
+                small = age;
+            }
+            return (small);
+        }
+
+
+
+
+
+        static void Main(string[] args)
+        {
+            int age = 0, average = 0, teenAgeSum = 0, teenOddAvg = 0, primeAge = 0, small = 1000;
+            Console.WriteLine("enter the number of age");
+            int NumberOfAge = int.Parse(Console.ReadLine());
+            Console.WriteLine("enter the age");
+            for (int i = 1; i <= NumberOfAge; i++)
+            {
+                age = int.Parse(Console.ReadLine());
+
+                average = FindaAvgAges(age, average);
+                teenAgeSum =  FindTeenAvg(age, teenAgeSum);
+                teenOddAvg = FindOddAvg(age, teenOddAvg);
+                primeAge = FindPrimeAge(age, primeAge);
+                small = FindMinAge(age, small);
+            }
+            Console.WriteLine("----------------------------------------------------------------------------------------");
+
+            Console.WriteLine($"{average/NumberOfAge}");
+            Console.WriteLine($"{teenAgeSum}");
+            Console.WriteLine($"{teenOddAvg}");
+            Console.WriteLine($"{primeAge}");
+            Console.WriteLine($"{small}");
+
+
+
+
+        }
+    }
+}
