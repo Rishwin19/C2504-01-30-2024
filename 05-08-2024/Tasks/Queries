@@ -1,0 +1,33 @@
+
+SELECT * FROM trainer;
+
+
+--find name of all the trainers
+SELECT name FROM trainer; 
+
+
+-- find a specific triner exist or not
+SELECT id, name, skill, place 
+FROM trainer 
+WHERE name = 'Mahesh';
+
+--find a specific trainer details
+SELECT id, name, skill, place 
+FROM trainer 
+WHERE name IN ('Mahesh','sanjay');
+
+
+-- find name starting from letter m
+SELECT id, name, skill, place 
+FROM trainer 
+WHERE name LIKE 'm%';
+
+-- find the trainers having name ending with l
+SELECT id, name, skill, place 
+FROM trainer 
+WHERE name LIKE '%l';
+
+--find all trsiner whose nam ecntains a
+SELECT id, name, skill, place 
+FROM trainer 
+WHERE name LIKE '%a%';
