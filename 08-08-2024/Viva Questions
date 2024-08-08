@@ -1,0 +1,106 @@
+1.What is a database?
+    A database is an organized collection of data that is stored and managed electronically. 
+    It allows for efficient storage, retrieval, and manipulation of data. 
+    Databases are designed to support various applications by storing data in a structured way, 
+    often in tables, so that it can be easily accessed, managed, and updated.
+
+2.What is an RDBMS (Relational Database Management System)?
+    An RDBMS (Relational Database Management System) is a type of database management system (DBMS) 
+    that stores data in a structured format using tables. The tables are organized into rows and columns, 
+    and the relationships between the tables are maintained through keys. 
+    RDBMSs provide tools for managing and querying relational databases,
+    making it easier to handle large amounts of data efficiently.
+
+    
+3.What is normalization in databases?
+    Normalization in databases is a process used to organize and structure data in such a way that
+    redundancy is minimized, and data integrity is maximized. The goal of normalization is to ensure
+    that the data is stored in a logical and efficient manner, reducing the chances of anomalies like 
+    data duplication or inconsistency.
+
+    
+4.Explain the different normal forms: 1NF, 2NF, and 3NF
+    1NF ensures that each column in a table contains only atomic (indivisible) values, with no repeating
+    groups or arrays. Essentially, data should be stored in a tabular format where each entry is unique.
+    2NF builds on 1NF by ensuring that all non-key attributes are fully dependent on the entire primary key. 
+    This removes partial dependencies, especially in tables with composite keys.
+    3NF further refines the table by removing transitive dependencies. In 3NF, non-key attributes should 
+    depend only on the primary key, not on other non-key attributes.
+
+    
+5.What are dependencies in the context of databases?
+    Dependencies in the context of databases refer to the relationships between different attributes (columns) within a table.
+    They describe how one attribute's value is determined by the value of another attribute
+
+    
+6.What is a partial dependency
+    A partial dependency in database normalization occurs when a non-prime attribute 
+    (an attribute that is not part of a candidate key)
+    is functionally dependent on only a part of a composite primary key, 
+    rather than on the whole key.
+    Partial dependency is a concern in Second Normal Form (2NF) and needs to be 
+    eliminated to achieve 2NF. When a partial dependency exists, it means that some 
+    non-prime attributes depend only on part of the composite key, leading to redundancy and potential 
+    anomalies in the database.
+
+    
+7.What is a transitive dependency?
+    A transitive dependency in a database occurs when a non-prime attribute 
+    (an attribute that is not part of any candidate key) depends on another non-prime attribute,
+    which in turn depends on the primary key. Essentially, it's an indirect dependency where one non-key
+    attribute is dependent on another non-key attribute, which itself depends on the primary key.
+    Transitive dependencies are a concern in Third Normal Form (3NF) and need to be eliminated to achieve 3NF.
+    The presence of transitive dependencies can lead to data redundancy and anomalies.
+
+    
+8.What are the different types of keys in a database?
+      Primary Key: A primary key is a unique identifier for a record in a table. 
+             It ensures that no duplicate records exist and that each record can be uniquely identified.
+             A table can have only one primary key, and it cannot contain NULL values.
+      Candidate Key:  A candidate key is any column or a combination of columns that can qualify as a unique key in the table. 
+                There can be multiple candidate keys in a table, and each one could be chosen as the primary key.
+      Super Key:   A super key is a set of one or more columns (attributes) that can uniquely identify a row in a table.
+             A super key can include additional attributes that are not necessary for unique identification, 
+             making it a superset of the candidate key.
+      Alternate Key:   An alternate key is any candidate key that is not chosen as the primary key. 
+                 If there are multiple candidate keys, one becomes the primary key, and the others are alternate keys.
+      Foreign Key:     A foreign key is a column or set of columns in one table that establishes a link between data in two tables.
+               It references the primary key in another table, ensuring referential integrity by enforcing a 
+               relationship between the tables.
+      Composite Key:    A composite key is a key that consists of two or more columns to uniquely identify a record in a table.
+                  It is used when a single column is not sufficient to uniquely identify records.
+      Unique Key:   A unique key is a key that ensures that all values in a column or a set of columns are unique across the
+              database table. Unlike the primary key, a table can have multiple unique keys, and they can accept NULL values 
+              (although each NULL must be unique).
+
+              
+9.What are transactions in a database?
+      A transaction is a sequence of one or more SQL operations executed as a single unit of work.
+      Begin Transaction: Marks the start of a transaction.
+      Commit:     Finalizes the transaction and makes all changes permanent.
+      Rollback:   Undoes all changes made during the transaction, reverting the database to
+          its previous state in case of an error or explicit abort.
+
+10.What are the ACID properties in database transactions?
+      1. Atomicity:
+
+      Definition: A transaction is an indivisible unit of work; it either completes entirely or does not happen at all.
+      Implication: If a transaction involves multiple operations, all operations must succeed for the transaction to be 
+            considered successful. If any part of the transaction fails, the entire transaction is rolled back, and none of the operations are applied.
+
+      2.Consistency:
+
+      Definition: A transaction must transition the database from one consistent state to another consistent state.
+      Implication: The database must adhere to all predefined rules, constraints, and relationships before and after a transaction.
+              If a transaction would violate any integrity constraints or rules, it is rolled back to ensure consistency.
+
+      3.Isolation:
+
+      Definition: Transactions must be isolated from one another, meaning that the operations of one transaction should not be visible to other transactions until the transaction is complete.
+      Implication: Intermediate results of a transaction are not visible to other transactions. This ensures that transactions do not interfere with each other and maintains data integrity in concurrent environments.
+
+      4.Durability:
+
+      Definition: Once a transaction is committed, its changes are permanent and must survive system failures.
+      Implication: Committed transactions are saved to non-volatile storage and are not lost even if there is a
+            power outage, system crash, or other failure. The database must ensure that the effects of committed transactions persist.
