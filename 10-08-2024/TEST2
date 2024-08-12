@@ -1,0 +1,86 @@
+
+1.  Find Total Sales per Month
+Problem: Given a `Sales` table
+with columns `SaleAmount` and `SaleDate`,
+find the total sales amount for each month.
+
+
+SELECT 
+        YEAR(SaleDate) AS year,MONTH(SaleDate) AS Month
+        SUM(SaleAmount) AS Total_Sales
+FROM Sales
+GROUP BY
+         MONTH(SaleDate),YEAR(SaleDate);   
+
+
+
+2.  Find the Most Recent Order for Each Customer
+Problem: Given an `Orders` table
+with columns `OrderID`, `CustomerID`, and `OrderDate`,
+find the most recent order date for each customer.
+
+Table Structure:
+
+CREATE TABLE Orders (
+OrderID INT,
+CustomerID INT,
+OrderDate DATE
+);
+
+
+
+SELECT CustomerID,OrderID,OrderDate
+FROM Orders
+WHERE 
+        OrderDate = (
+                SELECT MAX(OrderDate)
+                FROM Orders AS InOrders
+                WHERE Orders.CutomerID = InOrders.CustomerID
+);   
+
+
+
+
+3.Find Employees Who Earn More Than Their Managers
+Problem: Given an `Employees` table
+with columns `EmployeeID`, `ManagerID`, and `Salary`,
+find employees who earn more than their managers.
+
+SELECT e.EmployeeID
+FROM Employees e
+INNER JOIN
+Employees m
+ON
+ e.ManagerID = m.EmployeesID
+WHERE e.Salary > m.salary;
+
+
+
+
+4.Find the Oldest and Youngest Employees
+Problem: Given an `Employees` table
+with columns `EmployeeID`, `Name`, and `DateOfBirth`,
+find the oldest and youngest employees.
+
+SELECT  EmployeeID,Name,DateOfBirth
+FROM Employees
+WHERE DateOfBirth = (SELECT MIN(DateOfBirth) FROM Employees) or DateOfBirth = (SELECT MAX(DateOfBirth) FROM Employees);
+
+
+
+
+
+5.Find Customers with No Orders in the Last Year
+Problem: Given a `Customers` table and an `Orders` table,
+find customers who have not placed any orders in the last year.
+
+SELECT c.CustomerID,c.CustomerName
+FROM Customers c 
+LEFT JOIN Orders o
+ON
+c.CustomerID = o.CustomerID
+AND YEAR(ORDERDATE) = YEAR(GETDATE())-1
+WHERE
+o.OrderID IS NULL;
+
+
