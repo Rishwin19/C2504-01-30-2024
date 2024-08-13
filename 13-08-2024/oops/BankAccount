@@ -9,14 +9,27 @@ namespace _13
     class account
     {
         private float balance;
+        public string number;
 
         public float Balance
         {
-            private set {  balance = value; }
+            private set
+            {
+                if (value < 0)
+                {
+                    Console.WriteLine("You cannot deposit a negative amount");
+                }
+                if (value > 5000000)
+                {
+                    Console.WriteLine("You cannot deposit amount more than 5000000");
+                }
+                balance = value;
+            }
             get { return balance; }
         }
 
-        public string number;
+
+        
 
         public account(string _number)
         {
@@ -25,12 +38,12 @@ namespace _13
         }
         public void deposit(float amount)
         {
-           if ((balance + amount) > 700000)
+            //if ((balance + amount) > 700000)
+            //{
+            //    Console.WriteLine("transcation cancelledd!!!");
+            //}
+            //else
             {
-                Console.WriteLine("transcation cancelledd!!!");
-            }
-            else
-
                 balance += amount;
             }
 
@@ -53,14 +66,18 @@ namespace _13
             static void Main(string[] args)
             {
                 account somebody = new account("986453678986");
+                Console.WriteLine($"{somebody.number}");
                 Console.WriteLine($"{somebody.balance}");
-                somebody.deposit(700000);
+                somebody.deposit(7000000);
                 Console.WriteLine($"{somebody.balance}");
                 somebody.deposit(800000);
                 Console.WriteLine($"{somebody.balance}");
                 somebody.withdraw(800000);
                 Console.WriteLine($"{somebody.balance}");
-        
+                somebody.Balance = 0;
+                Console.WriteLine($"{somebody.balance}");
+                
+
             }
 
         }
