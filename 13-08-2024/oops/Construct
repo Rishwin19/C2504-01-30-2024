@@ -1,0 +1,35 @@
+
+
+namespace _13
+{
+    class movie
+    {
+        public int id;
+        public string title;
+
+        public movie(int _id, string _title)
+        {
+            this.id = _id;
+            this.title = _title;
+        }
+        public movie()
+        {
+            id = 0;
+            title = "";
+        }
+    }
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            movie abcd = new movie(1001, "abcd");
+            movie abc = new movie();
+            abc.id = 1002;
+            abc.title = "abc";
+            Console.WriteLine($"{abcd.id},{abcd.title}");
+            Console.WriteLine($"{abc.id},{abc.title}");
+
+        }
+
+    }
+}
