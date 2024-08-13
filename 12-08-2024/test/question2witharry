@@ -1,0 +1,156 @@
+using System;
+
+class Minnu
+{
+    static void ReadPatientAgeTillBelowZero()
+    {
+        int count = 0;
+        int countOdd = 0;
+        int sum = 0;
+        int avg = 0;
+        int primeSum = 0;
+        int teenagerSum = 0;
+        int min = int.MaxValue;
+        int oddSum = 0;
+        bool isMinPrime = false;
+        int maxAdult = int.MinValue, secondMaxAdult = int.MinValue;
+
+        
+        int[] ages = new int[100];
+        int age;
+        int index = 0;
+
+        
+        do
+        {
+            age = int.Parse(Console.ReadLine());
+
+            if (age < 0) // To stop input condition
+            {
+                break;
+            }
+            if (age == 0) // Validation
+            {
+                Console.WriteLine("Invalid age");
+                continue;
+            }
+
+            ages[index] = age; // Store the age in the array
+            index++;
+            count++;
+        } while (age >= 0 && index < ages.Length);
+
+        // Process the ages stored in the array
+        for (int i = 0; i < index; i++)
+        {
+            int currentAge = ages[i];
+
+            if (IsOdd(currentAge)) // Check for odd number ages
+            {
+                countOdd++;
+                oddSum += currentAge;
+            }
+            if (IsAdult(currentAge)) // Check for adult age
+            {
+                if (currentAge > maxAdult) // Check for max adult age
+                {
+                    if (maxAdult != int.MaxValue)
+                    {
+                        secondMaxAdult = maxAdult;
+                    }
+                    maxAdult = currentAge;
+                }
+                else if (currentAge > secondMaxAdult && currentAge != maxAdult)
+                {
+                    secondMaxAdult = currentAge;
+                }
+            }
+            sum = sum + currentAge;
+            if (IsPrime(currentAge)) // Check for prime ages
+            {
+                primeSum += currentAge;
+            }
+
+            if (IsTeenager(currentAge)) // Check for teenager
+            {
+                teenagerSum += currentAge;
+            }
+
+            if (currentAge < min) // Check for min age
+            {
+                min = currentAge;
+            }
+        }
+
+        isMinPrime = IsPrime(min);
+
+        avg = sum / count; // To find average
+        Console.WriteLine($"Average Age: {avg}");
+        Console.WriteLine($"Prime Ages sum: {primeSum}");
+        Console.WriteLine($"Teenagers' Age Sum: {teenagerSum}");
+        Console.WriteLine($"Min Age#: {min}");
+        Console.WriteLine($"Odd Age Sum#: {oddSum}");
+        if (secondMaxAdult == int.MaxValue)
+        {
+            Console.WriteLine("Second Max Adult Age does not exist");
+        }
+        else
+        {
+            Console.WriteLine($"Second Max Adult Age#: {secondMaxAdult}");
+        }
+
+        if (isMinPrime) // Check if Minimum age is prime
+        {
+            Console.WriteLine("Minimum age is also prime");
+        }
+        else
+        {
+            Console.WriteLine("Minimum age is not prime");
+        }
+    }
+
+    static bool IsPrime(int age)
+    {
+        if (age < 2) return false;
+        bool isPrime = true;
+        int sqrtAge = (int)Math.Sqrt((double)age);
+        for (int i = 2; i <= sqrtAge; i++)
+        {
+            if (age % i == 0)
+            {
+                isPrime = false;
+                break;
+            }
+        }
+        return isPrime;
+    }
+
+    static bool IsTeenager(int age)
+    {
+        return ((age >= 13) && (age <= 19));
+    }
+
+    static bool IsAdult(int age)
+    {
+        return (age > 19);
+    }
+
+    static bool IsOdd(int age)
+    {
+        return age % 2 != 0;
+    }
+
+    static void TestReadPatientAgeTillBelowZero()
+    {
+        ReadPatientAgeTillBelowZero();
+    }
+
+    static void Main(string[] args)
+    {
+        Console.WriteLine("-----TestReadPatientAgeTillBelowZero-----");
+        TestReadPatientAgeTillBelowZero();
+        Console.WriteLine("-----End TestReadPatientAgeTillBelowZero-----");
+        Console.WriteLine("Press any key to continue...");
+        Console.ReadKey();
+    }
+}
