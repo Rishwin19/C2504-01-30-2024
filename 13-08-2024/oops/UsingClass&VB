@@ -1,0 +1,52 @@
+using System;
+using HIIII;
+class NameSpace
+{
+   
+
+    static void Main(string[] args)
+    {
+        int a = 10, b = 20;‬
+        int s = Class1.FindSum(a, b);
+        Console.WriteLine(s);
+        Console.ReadKey(); 
+    }
+}
+
+
+
+Public Class Class1
+    Public Shared Function FindSum(First As Integer, Second As Integer) As Integer
+        Dim sum As Integer = First + Second
+        Return sum
+    End Function
+
+End Class
+
+using hiii;
+using System;
+class NameSpace
+{
+   
+
+    static void Main(string[] args)
+    {
+        Trainer mahesh = new Trainer();
+        mahesh.id = 10;
+        mahesh.name = "mahesh";
+        mahesh.place = "mysuru";
+        mahesh.salary = 5000;
+        mahesh.skill = "c#";
+
+        Trainer mishel = new Trainer();
+        mishel.id = 11;
+        mishel.name = "mishel";
+        mishel.place = "idukki";
+        mishel.salary = 8000;
+        mishel.skill = "wpf";
+        Console.ReadKey();
+        Console.WriteLine($"{mahesh.name}: {mahesh.id},{mahesh.salary},{mahesh.skill},{mahesh.place}");
+        Console.WriteLine($"{mishel.name}: {mishel.id},{mishel.name},{mishel.salary},{mishel.skill},{mishel.place}");
+
+    }
+}
