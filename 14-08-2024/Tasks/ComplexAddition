@@ -1,0 +1,49 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.InteropServices;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ComplexNumber
+{
+    public class ComplexAddition
+    {
+        public int Real;
+        public int Imaginary;
+
+        public void SumComplexNumber(int Real1, int Real2, int img1, int img2)
+        {
+            Console.WriteLine($" Result : {Real1 + Real2} +  i{img1 + img2} ");
+        }
+
+        public void  Run()
+        {
+            ComplexAddition num1 = new ComplexAddition
+            { 
+                Real = 5,
+                Imaginary = 7
+            };
+
+            ComplexAddition num2 = new ComplexAddition
+            {
+                Real = 5,
+                Imaginary = 9
+            };
+
+            SumComplexNumber(num1.Real, num2.Real, num2.Imaginary, num1.Imaginary);
+
+        }
+        
+      
+    }
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            ComplexAddition call = new ComplexAddition();
+            call.Run();
+
+        }
+    }
+}
