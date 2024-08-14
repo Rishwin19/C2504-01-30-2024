@@ -1,0 +1,59 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.InteropServices;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ComplexNumber
+{
+    public class Rectangle
+    {
+        public int Breadth;
+        private int length;
+
+        public int Length
+        {
+            get
+            {
+                return length;
+            }
+
+            set
+            {
+                if (value > 10)
+                {
+                    length = value;
+                }
+                else 
+                {
+                    Console.WriteLine(" input length grateer than 10 ");
+                }
+            }
+        }
+
+        public void FindArea(int Length, int Breadth)
+        {
+            Console.WriteLine($"{Length * Breadth}");
+        }
+
+        public void  Run()
+        {
+            Rectangle rec = new Rectangle();
+            rec.Length = int.Parse(Console.ReadLine());
+            rec.Breadth = int.Parse(Console.ReadLine());
+            rec.FindArea(rec.Length, rec.Breadth);
+        }
+
+
+    }
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            Rectangle rec = new Rectangle();
+            rec.Run();
+
+        }
+    }
+}
