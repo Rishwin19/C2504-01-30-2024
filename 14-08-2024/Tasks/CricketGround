@@ -1,0 +1,61 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Ground
+{
+    public class CricketGround
+    {
+        public int leftside, rightside, straight, back;
+
+        public int FindShotest()
+        {
+            if (leftside < rightside && leftside < straight && leftside < back)
+            {
+                Console.WriteLine($"leftside :{leftside}");
+            }
+            else if (rightside < leftside && rightside < straight && rightside < back)
+            {
+                Console.WriteLine($"rightside :{rightside}");
+            }
+            else if (straight < leftside && straight < rightside && straight < back)
+            {
+                Console.WriteLine($"straight :{straight}");
+            }
+            else
+            {
+                Console.WriteLine($"back :{back}");
+            }
+            return 1;
+
+        }
+    }
+    internal class Program
+    {
+
+        static void Main(string[] args)
+        {
+            CricketGround ground1 = new CricketGround
+            {   
+                leftside = 20,
+                rightside =30,
+                straight = 50,
+                back = 10
+
+            };
+            CricketGround ground2 = new CricketGround
+            {
+                leftside = 60,
+                rightside = 15,
+                straight = 50,
+                back = 25
+            };
+            
+            ground1.FindShotest();
+            ground2.FindShotest();
+
+        }
+    }
+}
