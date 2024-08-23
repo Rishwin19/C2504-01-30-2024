@@ -1,0 +1,65 @@
+using System;
+
+
+public class MedicalRecord
+{
+    public int RecordID;
+    public string Docter;
+    public string Patient;
+    public int visitduration;
+
+
+}
+
+
+
+internal class Programs
+{
+  
+
+    static void Main(string[] args)
+    {
+
+        MedicalRecord[] records = new MedicalRecord [5];
+        for (int i = 1; i < 5; i++)
+        {
+            records[i] = new MedicalRecord();
+            records[i].RecordID = i;
+
+            Console.WriteLine("enter docter name");
+            records[i].Docter = Console.ReadLine();
+
+            Console.WriteLine("enter patient name");
+            records[i].Patient = (Console.ReadLine());
+
+            Console.WriteLine("enter duration name");
+            records[i].visitduration = int.Parse(Console.ReadLine());
+
+        }
+        int index = FindLeastDurationVisit(records);
+
+
+
+        Console.WriteLine("The details of patients are :");
+        Console.WriteLine($"RecordID :{records[index].RecordID} ,Docter :{records[index].Docter}, Patient :{records[index].Patient}, visitduration :{records[index].visitduration} ");
+
+    }
+    public static int FindLeastDurationVisit(MedicalRecord[] records)
+    {
+        int minindex = 1;
+        for (int i = 1; i < 5; i++)
+        {
+
+            for (int j = i + 1; j < 5; j++)
+            {
+                if (records[minindex].visitduration > records[j].visitduration)
+                    minindex = j;
+            }
+
+            //Console.WriteLine($"the shotest duration is {records[minindex].visitduration},{records[minindex].RecordID}");
+
+        }
+        return minindex;
+    }
+}
+
