@@ -1,50 +1,59 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace question224aug
+namespace DoctorPatientApp
 {
     class Doctor
     {
         public int DoctorID { get; set; }
         public string Name { get; set; }
+
         public virtual double ConsultationFee()
-        {   
+        {
             return 0;
         }
+
+        public override string ToString()
+        {
+            return $"DoctorID: {DoctorID}, Name: {Name}";
+        }
     }
+
     class GeneralPractitioner : Doctor
     {
         public int ConsultationHours { get; set; }
+
         public override double ConsultationFee()
         {
-            return ConsultationHours * 50;
+            return ConsultationHours * 50; 
         }
 
+        public override string ToString()
+        {
+            return base.ToString() + $", ConsultationHours: {ConsultationHours}, Fee: {ConsultationFee()}";
+        }
     }
+
     class Specialist : Doctor
     {
         public string Specialization { get; set; }
+
         public override double ConsultationFee()
         {
             if (Specialization == "Cardiology")
-            {
-                return 200;
-            }
-            else if (Specialization == "Nuerolgy")
-            {
-                return 150;
-            }
-            else 
-            {
+                return 200; 
+            else if (Specialization == "Neurology")
+                return 150; 
+            else
                 return 100;
-            }
+        }
+
+        public override string ToString()
+        {
+            return base.ToString() + $", Specialization: {Specialization}, Fee: {ConsultationFee()}";
         }
     }
 
-    internal class Program
+    class Program
     {
         static void Main(string[] args)
         {
@@ -79,30 +88,15 @@ namespace question224aug
 
                 doctors[i] = doctor;
             }
+
             double totalFees = 0;
-            for (int i = 0; i < doctors.Length; i++)
+            foreach (var doctor in doctors)
             {
-                Doctor doctor = doctors[i];
-                string doctorType = doctor is GeneralPractitioner ? "General Practitioner" : "Specialist";
-                Console.WriteLine($"DoctorID: {doctor.DoctorID}, Name: {doctor.Name}, Type: {doctorType}");
-
-                if (doctor is GeneralPractitioner gp)
-                {
-                    Console.WriteLine($"Consultation Hours: {gp.ConsultationHours}");
-                }
-                else if (doctor is Specialist sp)
-                {
-                    Console.WriteLine($"Specialization: {sp.Specialization}");
-                }
-
-                double fee = doctor.ConsultationFee();
-                Console.WriteLine($"Consultation Fee: {fee}");
-                totalFees += fee;
-                Console.WriteLine();
+                Console.WriteLine(doctor);
+                totalFees += doctor.ConsultationFee();
             }
 
             Console.WriteLine($"Total consultation fees for all doctors: {totalFees}");
         }
-
     }
 }
