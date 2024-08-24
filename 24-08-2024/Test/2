@@ -1,0 +1,108 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace question224aug
+{
+    class Doctor
+    {
+        public int DoctorID { get; set; }
+        public string Name { get; set; }
+        public virtual double ConsultationFee()
+        {   
+            return 0;
+        }
+    }
+    class GeneralPractitioner : Doctor
+    {
+        public int ConsultationHours { get; set; }
+        public override double ConsultationFee()
+        {
+            return ConsultationHours * 50;
+        }
+
+    }
+    class Specialist : Doctor
+    {
+        public string Specialization { get; set; }
+        public override double ConsultationFee()
+        {
+            if (Specialization == "Cardiology")
+            {
+                return 200;
+            }
+            else if (Specialization == "Nuerolgy")
+            {
+                return 150;
+            }
+            else 
+            {
+                return 100;
+            }
+        }
+    }
+
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Enter number of doctors:");
+            int numDoctors = int.Parse(Console.ReadLine());
+            Doctor[] doctors = new Doctor[numDoctors];
+
+            for (int i = 0; i < numDoctors; i++)
+            {
+                Console.WriteLine("Enter type of doctor (1 for General Practitioner, 2 for Specialist):");
+                int type = int.Parse(Console.ReadLine());
+
+                Doctor doctor = null;
+                if (type == 1)
+                {
+                    doctor = new GeneralPractitioner();
+                    Console.WriteLine("Enter consultation hours:");
+                    ((GeneralPractitioner)doctor).ConsultationHours = int.Parse(Console.ReadLine());
+                }
+                else if (type == 2)
+                {
+                    doctor = new Specialist();
+                    Console.WriteLine("Enter specialization:");
+                    ((Specialist)doctor).Specialization = Console.ReadLine();
+                }
+
+                Console.WriteLine("Enter doctor ID:");
+                doctor.DoctorID = int.Parse(Console.ReadLine());
+
+                Console.WriteLine("Enter doctor name:");
+                doctor.Name = Console.ReadLine();
+
+                doctors[i] = doctor;
+            }
+            double totalFees = 0;
+            for (int i = 0; i < doctors.Length; i++)
+            {
+                Doctor doctor = doctors[i];
+                string doctorType = doctor is GeneralPractitioner ? "General Practitioner" : "Specialist";
+                Console.WriteLine($"DoctorID: {doctor.DoctorID}, Name: {doctor.Name}, Type: {doctorType}");
+
+                if (doctor is GeneralPractitioner gp)
+                {
+                    Console.WriteLine($"Consultation Hours: {gp.ConsultationHours}");
+                }
+                else if (doctor is Specialist sp)
+                {
+                    Console.WriteLine($"Specialization: {sp.Specialization}");
+                }
+
+                double fee = doctor.ConsultationFee();
+                Console.WriteLine($"Consultation Fee: {fee}");
+                totalFees += fee;
+                Console.WriteLine();
+            }
+
+            Console.WriteLine($"Total consultation fees for all doctors: {totalFees}");
+        }
+
+    }
+}
