@@ -1,0 +1,146 @@
+using System;
+using System.Data.SqlClient;
+
+namespace CourseEnroll
+{
+    class VitalSigns
+    {
+        public int PatientID { get; set; }
+        public int HeartRate { get; set; }
+        public string BloodPressure { get; set; }
+        public double Temperature { get; set; }
+
+        private VitalSigns[] vitalSigns = new VitalSigns[20];
+        private int count = 0;
+
+        private string connectionString = "Data Source=(localdb)\\ProjectModels;Initial Catalog=HealthDB;Integrated Security=True;";
+
+        public void LoadDataFromDatabase()
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                string query = "SELECT * FROM VitalSigns";
+                SqlCommand command = new SqlCommand(query, connection);
+                connection.Open();
+                SqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read() && count < vitalSigns.Length)
+                {
+                    vitalSigns[count] = new VitalSigns
+                    {
+                        PatientID = reader.GetInt32(0),
+                        HeartRate = reader.GetInt32(1),
+                        BloodPressure = reader.GetString(2),
+                        Temperature = reader.GetDouble(3)
+                    };
+                    count++;
+                }
+            }
+        }
+
+        public void FindLowestHeartRate()
+        {
+            if (count == 0)
+            {
+                Console.WriteLine("No vital signs available.");
+                return;
+            }
+
+            int minHeartRateIndex = 0;
+
+            for (int j = 1; j < count; j++)
+            {
+                if (vitalSigns[j].HeartRate < vitalSigns[minHeartRateIndex].HeartRate)
+                {
+                    minHeartRateIndex = j;
+                }
+            }
+
+            Console.WriteLine($"The lowest heart rate: PatientID: {vitalSigns[minHeartRateIndex].PatientID} \nHeartRate: {vitalSigns[minHeartRateIndex].HeartRate}\n");
+        }
+
+        public void FindSecondHighestTemperature()
+        {
+            if (count < 2)
+            {
+                Console.WriteLine("Not enough data to find the second highest temperature.");
+                return;
+            }
+
+            double highest = double.MinValue;
+            double secondHighest = double.MinValue;
+
+            for (int j = 0; j < count; j++)
+            {
+                if (vitalSigns[j].Temperature > highest)
+                {
+                    secondHighest = highest;
+                    highest = vitalSigns[j].Temperature;
+                }
+                else if (vitalSigns[j].Temperature > secondHighest && vitalSigns[j].Temperature < highest)
+                {
+                    secondHighest = vitalSigns[j].Temperature;
+                }
+            }
+
+            if (secondHighest == double.MinValue)
+            {
+                Console.WriteLine("No second highest temperature found.");
+            }
+            else
+            {
+                Console.WriteLine($"The second highest temperature: {secondHighest}\n");
+            }
+        }
+
+        public void SortBySystolicPressure()
+        {
+            for (int i = 0; i < count - 1; i++)
+            {
+                int minIndex = i;
+                for (int j = i + 1; j < count; j++)
+                {
+                    int systolicCurrent = int.Parse(vitalSigns[j].BloodPressure.Split('/')[0]);
+                    int systolicMin = int.Parse(vitalSigns[minIndex].BloodPressure.Split('/')[0]);
+
+                    if (systolicCurrent < systolicMin)
+                    {
+                        minIndex = j;
+                    }
+                }
+
+                if (minIndex != i)
+                {
+                    VitalSigns temp = vitalSigns[i];
+                    vitalSigns[i] = vitalSigns[minIndex];
+                    vitalSigns[minIndex] = temp;
+                }
+            }
+
+            Console.WriteLine("Vital signs sorted by systolic pressure:");
+            for (int i = 0; i < count; i++)
+            {
+                Console.WriteLine($"PatientID: {vitalSigns[i].PatientID}, BloodPressure: {vitalSigns[i].BloodPressure}, Temperature: {vitalSigns[i].Temperature}");
+            }
+        }
+    }
+
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            VitalSigns vs = new VitalSigns();
+            Console.WriteLine("--------------------------------Loading Data from Database------------------------------");
+            vs.LoadDataFromDatabase();
+            Console.WriteLine("");
+            Console.WriteLine("--------------------------------Lowest Heart Rate------------------------------");
+            vs.FindLowestHeartRate();
+            Console.WriteLine("");
+            Console.WriteLine("--------------------------------Second Highest Temperature------------------------------");
+            vs.FindSecondHighestTemperature();
+            Console.WriteLine("");
+            Console.WriteLine("--------------------------------Sort By Systolic Pressure------------------------------");
+            vs.SortBySystolicPressure();
+        }
+    }
+}
