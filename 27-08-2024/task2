@@ -1,0 +1,287 @@
+using System;
+using System.Collections; 
+using System.Data.SqlClient; 
+using log4net; 
+using log4net.Config; 
+using System.Reflection; 
+
+namespace CourseEnroll
+{
+    class VitalSigns
+    {
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+
+        public int PatientID { get; set; }
+        public int HeartRate { get; set; }
+        public string BloodPressure { get; set; }
+        public double Temperature { get; set; }
+
+        public static ArrayList vitalSignsList = new ArrayList();
+
+        private string connectionString = "Data Source=(localdb)\\ProjectModels;Initial Catalog=HealthDB;Integrated Security=True;";
+
+        public void LoadDataFromDatabase()
+        {
+            log.Info("Loading data from database...");
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                string query = "SELECT * FROM VitalSigns";
+                SqlCommand command = new SqlCommand(query, connection);
+                connection.Open();
+                SqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    vitalSignsList.Add(new VitalSigns
+                    {
+                        PatientID = reader.GetInt32(0),
+                        HeartRate = reader.GetInt32(1),
+                        BloodPressure = reader.GetString(2),
+                        Temperature = reader.GetDouble(3)
+                    });
+                }
+
+                log.Info("Data loaded successfully.");
+            }
+        }
+    }
+
+    class CreateOperation
+    {
+        public void AddVitalSigns(VitalSigns vs)
+        {
+            VitalSigns.vitalSignsList.Add(vs);
+            Console.WriteLine("Vital signs added successfully.");
+        }
+    }
+
+    class ReadOperation
+    {
+        public void DisplayAll()
+        {
+            foreach (VitalSigns vs in VitalSigns.vitalSignsList)
+            {
+                Console.WriteLine($"PatientID: {vs.PatientID}, HeartRate: {vs.HeartRate}, BloodPressure: {vs.BloodPressure}, Temperature: {vs.Temperature}");
+            }
+        }
+
+        public void FindLowestHeartRate()
+        {
+            Console.WriteLine("Finding the lowest heart rate...");
+
+            if (VitalSigns.vitalSignsList.Count == 0)
+            {
+                Console.WriteLine("No vital signs available.");
+                return;
+            }
+
+            int minHeartRateIndex = 0;
+
+            for (int j = 1; j < VitalSigns.vitalSignsList.Count; j++)
+            {
+                if (((VitalSigns)VitalSigns.vitalSignsList[j]).HeartRate < ((VitalSigns)VitalSigns.vitalSignsList[minHeartRateIndex]).HeartRate)
+                {
+                    minHeartRateIndex = j;
+                }
+            }
+
+            Console.WriteLine($"The lowest heart rate: PatientID: {((VitalSigns)VitalSigns.vitalSignsList[minHeartRateIndex]).PatientID} \nHeartRate: {((VitalSigns)VitalSigns.vitalSignsList[minHeartRateIndex]).HeartRate}\n");
+        }
+
+        public void FindSecondHighestTemperature()
+        {
+            Console.WriteLine("Finding the second highest temperature...");
+
+            if (VitalSigns.vitalSignsList.Count < 2)
+            {
+                Console.WriteLine("Not enough data to find the second highest temperature.");
+                return;
+            }
+
+            double highest = double.MinValue;
+            double secondHighest = double.MinValue;
+
+            foreach (VitalSigns vs in VitalSigns.vitalSignsList)
+            {
+                if (vs.Temperature > highest)
+                {
+                    secondHighest = highest;
+                    highest = vs.Temperature;
+                }
+                else if (vs.Temperature > secondHighest && vs.Temperature < highest)
+                {
+                    secondHighest = vs.Temperature;
+                }
+            }
+
+            if (secondHighest == double.MinValue)
+            {
+                Console.WriteLine("No second highest temperature found.");
+            }
+            else
+            {
+                Console.WriteLine($"The second highest temperature: {secondHighest}\n");
+            }
+        }
+
+        public void SortBySystolicPressure()
+        {
+            Console.WriteLine("Sorting vital signs by systolic pressure...");
+
+            for (int i = 0; i < VitalSigns.vitalSignsList.Count - 1; i++)
+            {
+                int minIndex = i;
+                for (int j = i + 1; j < VitalSigns.vitalSignsList.Count; j++)
+                {
+                    int systolicCurrent = int.Parse(((VitalSigns)VitalSigns.vitalSignsList[j]).BloodPressure.Split('/')[0]);
+                    int systolicMin = int.Parse(((VitalSigns)VitalSigns.vitalSignsList[minIndex]).BloodPressure.Split('/')[0]);
+
+                    if (systolicCurrent < systolicMin)
+                    {
+                        minIndex = j;
+                    }
+                }
+
+                if (minIndex != i)
+                {
+                    VitalSigns temp = (VitalSigns)VitalSigns.vitalSignsList[i];
+                    VitalSigns.vitalSignsList[i] = VitalSigns.vitalSignsList[minIndex];
+                    VitalSigns.vitalSignsList[minIndex] = temp;
+                }
+            }
+
+            Console.WriteLine("Vital signs sorted by systolic pressure:");
+            foreach (VitalSigns vs in VitalSigns.vitalSignsList)
+            {
+                Console.WriteLine($"PatientID: {vs.PatientID}, BloodPressure: {vs.BloodPressure}, Temperature: {vs.Temperature}");
+            }
+        }
+    }
+
+    class UpdateOperation
+    {
+        public void UpdateVitalSigns(int patientID, VitalSigns newVs)
+        {
+            foreach (VitalSigns vs in VitalSigns.vitalSignsList)
+            {
+                if (vs.PatientID == patientID)
+                {
+                    vs.HeartRate = newVs.HeartRate;
+                    vs.BloodPressure = newVs.BloodPressure;
+                    vs.Temperature = newVs.Temperature;
+                    Console.WriteLine("Vital signs updated successfully.");
+                    return;
+                }
+            }
+            Console.WriteLine("Patient not found.");
+        }
+    }
+
+    class DeleteOperation
+    {
+        public void DeleteVitalSigns(int patientID)
+        {
+            for (int i = 0; i < VitalSigns.vitalSignsList.Count; i++)
+            {
+                VitalSigns vs = (VitalSigns)VitalSigns.vitalSignsList[i];
+                if (vs.PatientID == patientID)
+                {
+                    VitalSigns.vitalSignsList.RemoveAt(i);
+                    Console.WriteLine("Vital signs deleted successfully.");
+                    return;
+                }
+            }
+            Console.WriteLine("Patient not found.");
+        }
+    }
+
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            XmlConfigurator.Configure();
+
+            VitalSigns vs = new VitalSigns();
+            CreateOperation createOperation = new CreateOperation();
+            ReadOperation readOperation = new ReadOperation();
+            UpdateOperation updateOperation = new UpdateOperation();
+            DeleteOperation deleteOperation = new DeleteOperation();
+
+            vs.LoadDataFromDatabase();
+
+            while (true)
+            {
+                Console.WriteLine("Select an action:");
+                Console.WriteLine("1. Add Vital Signs");
+                Console.WriteLine("2. Display All Vital Signs");
+                Console.WriteLine("3. Find Lowest Heart Rate");
+                Console.WriteLine("4. Find Second Highest Temperature");
+                Console.WriteLine("5. Sort by Systolic Pressure");
+                Console.WriteLine("6. Update Vital Signs");
+                Console.WriteLine("7. Delete Vital Signs");
+                Console.WriteLine("8. Exit");
+                string choice = Console.ReadLine();
+
+                switch (choice)
+                {
+                    case "1":
+                        
+                        Console.WriteLine("Enter Patient ID:");
+                        int patientId = int.Parse(Console.ReadLine());
+
+                        Console.WriteLine("Enter Heart Rate:");
+                        int heartRate = int.Parse(Console.ReadLine());
+
+                        Console.WriteLine("Enter Blood Pressure (format: systolic/diastolic):");
+                        string bloodPressure = Console.ReadLine();
+
+                        Console.WriteLine("Enter Temperature:");
+                        double temperature = double.Parse(Console.ReadLine());
+
+                        
+                        createOperation.AddVitalSigns(new VitalSigns { PatientID = patientId, HeartRate = heartRate, BloodPressure = bloodPressure, Temperature = temperature });
+                        break;
+                    case "2":
+                        readOperation.DisplayAll();
+                        break;
+                    case "3":
+                        readOperation.FindLowestHeartRate();
+                        break;
+                    case "4":
+                        readOperation.FindSecondHighestTemperature();
+                        break;
+                    case "5":
+                        readOperation.SortBySystolicPressure();
+                        break;
+                    case "6":
+                        Console.WriteLine("Enter Patient ID to update:");
+                        int updatePatientId = int.Parse(Console.ReadLine());
+
+                        Console.WriteLine("Enter new Heart Rate:");
+                        int newHeartRate = int.Parse(Console.ReadLine());
+
+                        Console.WriteLine("Enter new Blood Pressure (format: systolic/diastolic):");
+                        string newBloodPressure = Console.ReadLine();
+
+                        Console.WriteLine("Enter new Temperature:");
+                        double newTemperature = double.Parse(Console.ReadLine());
+
+                        updateOperation.UpdateVitalSigns(updatePatientId, new VitalSigns { PatientID = updatePatientId, HeartRate = newHeartRate, BloodPressure = newBloodPressure, Temperature = newTemperature });
+                        break;
+                    case "7":
+                        Console.WriteLine("Enter Patient ID to delete:");
+                        int deletePatientId = int.Parse(Console.ReadLine());
+                        deleteOperation.DeleteVitalSigns(deletePatientId);
+                        break;
+                    case "8":
+                        Environment.Exit(0);
+                        break;
+                    default:
+                        Console.WriteLine("Invalid choice, please try again.");
+                        break;
+                }
+            }
+        }
+    }
+}
