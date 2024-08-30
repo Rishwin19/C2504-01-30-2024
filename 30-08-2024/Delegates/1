@@ -1,0 +1,28 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Runtime.InteropServices;
+using System.Security.Cryptography.X509Certificates;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ConsoleApp2
+{
+    public delegate void operation(int a, int b);
+
+    internal class Program
+    {
+        public static void Add(int a, int b) => Console.WriteLine(a + b);
+        public static void Sub(int a, int b) => Console.WriteLine(a - b);
+        static void Main(string[] args)
+        {
+            operation op = Add;
+            op(10, 5); //15
+            op(20, 10); //30
+            operation op1 = Sub;
+            op1(20, 5);  //15
+            op1(20, 10); //10
+        }
+    }
+}
