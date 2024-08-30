@@ -1,0 +1,58 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ConsoleApp2
+{
+    internal class Program
+    {
+        class EmployeeDetails
+        {
+            public string Name { get; set; }
+            public string Email { get; set; }
+            public double BasePay { get; set; }
+            public int Age { get; set; }
+        }
+
+        public int FindHighestSalary()
+        {
+            int high = 0;
+                for (int i = 0; 1 < 5; i++)
+            {
+
+            }
+        }
+
+        class YoughestEmployee
+        {
+            public int FindYoughestEmployee()
+            {
+
+                return 0;
+            }
+        }
+        class InputDetails
+        {
+            public void Inputvalues()
+            {
+                //HighestSalry hs = new HighestSalry();
+                EmployeeDetails[] employeeDetails = new EmployeeDetails[5];
+                employeeDetails[0] = new EmployeeDetails { Name = "name1", Age = 24, BasePay = 800, Email = "name1@gmail.com" };
+                employeeDetails[1] = new EmployeeDetails { Name = "name2", Age = 25, BasePay = 400, Email = "name2@gmail.com" };
+                employeeDetails[2] = new EmployeeDetails { Name = "name3", Age = 34, BasePay = 600, Email = "name3@gmail.com" };
+                employeeDetails[3] = new EmployeeDetails { Name = "name4", Age = 27, BasePay = 700, Email = "name4@gmail.com" };
+                employeeDetails[4] = new EmployeeDetails { Name = "name5", Age = 21, BasePay = 100, Email = "name5@gmail.com" };
+                hs.FindHighestSalary();
+            }
+        }
+    }
+
+
+        static void Main(string[] args)
+        {
+            
+        }
+    }
+}
