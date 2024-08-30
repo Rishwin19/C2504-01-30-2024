@@ -1,0 +1,34 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ConsoleApp2
+{
+    internal class Program
+    {
+        class Websites
+        {
+            public string Name { get; set; }
+            public string Address { get; set; }
+        }
+        class Website
+        {
+            private Websites[] _data = new Websites[10];
+            public Websites this[int index]
+            {
+                get { return _data[index]; }
+                set
+                {
+                    _data[index] = value;
+                }
+            }
+        }
+        static void Main(string[] args)
+        {
+            var websites = new Website();
+            websites[0] = new Websites() { Name = "name1", Address = "uagwyeyfguwg"};
+        }
+    }
+}
