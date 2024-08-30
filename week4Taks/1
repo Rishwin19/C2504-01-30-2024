@@ -189,3 +189,71 @@ app.config
 </configuration>
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+UNIT TESTS
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using CourseEnroll;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.IO;
+
+namespace CourseEnroll.Tests
+{
+    [TestClass()]
+    public class VitalSignsTests
+    {
+        [TestMethod()]
+        public void FindLowestHeartRateTest()
+        {
+            VitalSigns vs = new VitalSigns();
+            vs.LoadDataFromDatabase();
+            using (StringWriter sw = new StringWriter())
+            {
+                Console.SetOut(sw);
+                vs.FindLowestHeartRate();
+                string result = sw.ToString();
+                Assert.IsTrue(result.Contains("The lowest heart rate:"), "Lowest heart rate should be displayed.");
+            }
+        }
+
+        [TestMethod()]
+        public void FindSecondHighestTemperatureTest()
+        {
+            VitalSigns vs = new VitalSigns();
+            vs.LoadDataFromDatabase();
+            using (StringWriter sw = new StringWriter())
+            {
+                Console.SetOut(sw);
+                vs.FindSecondHighestTemperature();
+                string result = sw.ToString();
+                Assert.IsTrue(result.Contains("The second highest temperature:") || result.Contains("Not enough data to find the second highest temperature."), "Second highest temperature or not enough data message should be displayed.");
+            }
+        }
+
+        [TestMethod()]
+        public void SortBySystolicPressureTest()
+        {
+            VitalSigns vs = new VitalSigns();
+            vs.LoadDataFromDatabase();
+            using (StringWriter sw = new StringWriter())
+            {
+                Console.SetOut(sw);
+                vs.SortBySystolicPressure();
+                string result = sw.ToString();
+                Assert.IsTrue(result.Contains("Vital signs sorted by systolic pressure:"), "Vital signs should be sorted by systolic pressure.");
+            }
+        }
+
+        [TestMethod()]
+        public void LoadDataFromDatabaseTest()
+        {
+            VitalSigns vs = new VitalSigns();
+            vs.LoadDataFromDatabase();
+            Assert.IsTrue(vs.GetCount() > 0, "Data should be loaded from the database.");
+        }
+    }
+
+}
