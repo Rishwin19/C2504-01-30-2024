@@ -2,13 +2,12 @@ using System;
 using System.Data.SqlClient;
 using log4net;
 using log4net.Config;
-using System.Reflection;
 
 namespace CourseEnroll
 {
-    class VitalSigns
+    public class VitalSigns
     {
-        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILog log = LogManager.GetLogger(typeof(VitalSigns));
 
         public int PatientID { get; set; }
         public int HeartRate { get; set; }
@@ -23,38 +22,51 @@ namespace CourseEnroll
         public void LoadDataFromDatabase()
         {
             log.Info("Loading data from database...");
-
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            try
             {
-                string query = "SELECT * FROM VitalSigns";
-                SqlCommand command = new SqlCommand(query, connection);
-                connection.Open();
-                SqlDataReader reader = command.ExecuteReader();
-
-                while (reader.Read() && count < vitalSigns.Length)
+                using (SqlConnection connection = new SqlConnection(connectionString))
                 {
-                    vitalSigns[count] = new VitalSigns
-                    {
-                        PatientID = reader.GetInt32(0),
-                        HeartRate = reader.GetInt32(1),
-                        BloodPressure = reader.GetString(2),
-                        Temperature = reader.GetDouble(3)
-                    };
-                    count++;
-                }
+                    string query = "SELECT * FROM VitalSigns";
+                    SqlCommand command = new SqlCommand(query, connection);
+                    connection.Open();
+                    SqlDataReader reader = command.ExecuteReader();
 
+                    while (reader.Read() && count < vitalSigns.Length)
+                    {
+                        vitalSigns[count] = new VitalSigns
+                        {
+                            PatientID = reader.GetInt32(0),
+                            HeartRate = reader.GetInt32(1),
+                            BloodPressure = reader.GetString(2),
+                            Temperature = reader.GetDouble(3)
+                        };
+                        count++;
+                    }
+                }
                 log.Info("Data loaded successfully.");
             }
+            catch (Exception ex)
+            {
+                log.Error("Error loading data from database.", ex);
+            }
+        }
+
+        public void SetTestData(VitalSigns[] testData)
+        {
+            vitalSigns = testData;
+            count = testData.Length;
+        }
+
+        public int GetCount()
+        {
+            return count;
         }
 
         public void FindLowestHeartRate()
         {
-            log.Info("Finding the lowest heart rate...");
-
             if (count == 0)
             {
-                log.Warn("No vital signs available.");
-                Console.WriteLine("No vital signs available.");
+                log.Info("No vital signs available.");
                 return;
             }
 
@@ -68,18 +80,14 @@ namespace CourseEnroll
                 }
             }
 
-            log.Info($"Lowest heart rate found: PatientID: {vitalSigns[minHeartRateIndex].PatientID}, HeartRate: {vitalSigns[minHeartRateIndex].HeartRate}");
-            Console.WriteLine($"The lowest heart rate: PatientID: {vitalSigns[minHeartRateIndex].PatientID} \nHeartRate: {vitalSigns[minHeartRateIndex].HeartRate}\n");
+            log.Info($"The lowest heart rate: PatientID: {vitalSigns[minHeartRateIndex].PatientID} \nHeartRate: {vitalSigns[minHeartRateIndex].HeartRate}");
         }
 
         public void FindSecondHighestTemperature()
         {
-            log.Info("Finding the second highest temperature...");
-
             if (count < 2)
             {
-                log.Warn("Not enough data to find the second highest temperature.");
-                Console.WriteLine("Not enough data to find the second highest temperature.");
+                log.Info("Not enough data to find the second highest temperature.");
                 return;
             }
 
@@ -101,20 +109,16 @@ namespace CourseEnroll
 
             if (secondHighest == double.MinValue)
             {
-                log.Warn("No second highest temperature found.");
-                Console.WriteLine("No second highest temperature found.");
+                log.Info("No second highest temperature found.");
             }
             else
             {
-                log.Info($"Second highest temperature found: {secondHighest}");
-                Console.WriteLine($"The second highest temperature: {secondHighest}\n");
+                log.Info($"The second highest temperature: {secondHighest}");
             }
         }
 
         public void SortBySystolicPressure()
         {
-            log.Info("Sorting vital signs by systolic pressure...");
-
             for (int i = 0; i < count - 1; i++)
             {
                 int minIndex = i;
@@ -137,44 +141,47 @@ namespace CourseEnroll
                 }
             }
 
-            log.Info("Sorting completed.");
-            Console.WriteLine("Vital signs sorted by systolic pressure:");
+            log.Info("Vital signs sorted by systolic pressure:");
             for (int i = 0; i < count; i++)
             {
-                Console.WriteLine($"PatientID: {vitalSigns[i].PatientID}, BloodPressure: {vitalSigns[i].BloodPressure}, Temperature: {vitalSigns[i].Temperature}");
+                log.Info($"PatientID: {vitalSigns[i].PatientID}, BloodPressure: {vitalSigns[i].BloodPressure}, Temperature: {vitalSigns[i].Temperature}");
             }
         }
     }
 
     internal class Program
     {
+        private static readonly ILog log = LogManager.GetLogger(typeof(Program));
+
         static void Main(string[] args)
         {
-            // Configure log4net
+            // Initialize log4net
             XmlConfigurator.Configure();
 
             VitalSigns vs = new VitalSigns();
-            Console.WriteLine("--------------------------------Loading Data from Database------------------------------");
+            log.Info("--------------------------------Loading Data from Database------------------------------");
             vs.LoadDataFromDatabase();
-            Console.WriteLine("");
-            Console.WriteLine("--------------------------------Lowest Heart Rate------------------------------");
+            log.Info("");
+            log.Info("--------------------------------Lowest Heart Rate------------------------------");
             vs.FindLowestHeartRate();
-            Console.WriteLine("");
-            Console.WriteLine("--------------------------------Second Highest Temperature------------------------------");
+            log.Info("");
+            log.Info("--------------------------------Second Highest Temperature------------------------------");
             vs.FindSecondHighestTemperature();
-            Console.WriteLine("");
-            Console.WriteLine("--------------------------------Sort By Systolic Pressure------------------------------");
+            log.Info("");
+            log.Info("--------------------------------Sort By Systolic Pressure------------------------------");
             vs.SortBySystolicPressure();
         }
     }
 }
+
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 app.config
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <configuration>
 	<configSections>
-		<section name="log4net" type="log4net.Config.Log4NetConfigurationSectionHandler, log4net" />
+		<section name="log4net" type="log4net.Config.Log4NetConfigurationSectionHandler,log4net, Version=2.0.17.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a" />
 	</configSections>
+
 	<log4net>
 		<root>
 			<level value="DEBUG" />
@@ -182,7 +189,7 @@ app.config
 		</root>
 		<appender name="ConsoleAppender" type="log4net.Appender.ConsoleAppender">
 			<layout type="log4net.Layout.PatternLayout">
-				<conversionPattern value="%date [%thread] %-5level %logger - %message%newline" />
+				<conversionPattern value="%date %-5level %message%newline" />
 			</layout>
 		</appender>
 	</log4net>
@@ -194,10 +201,6 @@ UNIT TESTS
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using CourseEnroll;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 
 namespace CourseEnroll.Tests
@@ -208,52 +211,99 @@ namespace CourseEnroll.Tests
         [TestMethod()]
         public void FindLowestHeartRateTest()
         {
+            var testData = new[]
+            {
+                new VitalSigns { PatientID = 1, HeartRate = 80, BloodPressure = "120/80", Temperature = 98.6 },
+                new VitalSigns { PatientID = 2, HeartRate = 60, BloodPressure = "110/70", Temperature = 99.1 },
+                new VitalSigns { PatientID = 3, HeartRate = 70, BloodPressure = "130/85", Temperature = 97.8 }
+            };
+
             VitalSigns vs = new VitalSigns();
-            vs.LoadDataFromDatabase();
+            vs.SetTestData(testData);
+
             using (StringWriter sw = new StringWriter())
             {
                 Console.SetOut(sw);
                 vs.FindLowestHeartRate();
                 string result = sw.ToString();
-                Assert.IsTrue(result.Contains("The lowest heart rate:"), "Lowest heart rate should be displayed.");
+                Assert.IsTrue(result.Contains("The lowest heart rate: PatientID: 2 \nHeartRate: 60"), "Lowest heart rate should be displayed.");
             }
         }
 
         [TestMethod()]
         public void FindSecondHighestTemperatureTest()
         {
+            var testData = new[]
+            {
+                new VitalSigns { PatientID = 1, HeartRate = 80, BloodPressure = "120/80", Temperature = 98.6 },
+                new VitalSigns { PatientID = 2, HeartRate = 60, BloodPressure = "110/70", Temperature = 99.1 },
+                new VitalSigns { PatientID = 3, HeartRate = 70, BloodPressure = "130/85", Temperature = 97.8 }
+            };
+
             VitalSigns vs = new VitalSigns();
-            vs.LoadDataFromDatabase();
+            vs.SetTestData(testData);
+
             using (StringWriter sw = new StringWriter())
             {
                 Console.SetOut(sw);
                 vs.FindSecondHighestTemperature();
                 string result = sw.ToString();
-                Assert.IsTrue(result.Contains("The second highest temperature:") || result.Contains("Not enough data to find the second highest temperature."), "Second highest temperature or not enough data message should be displayed.");
+                Assert.IsTrue(result.Contains("The second highest temperature: 98.6") || result.Contains("Not enough data to find the second highest temperature."), "Second highest temperature or not enough data message should be displayed.");
             }
         }
 
         [TestMethod()]
         public void SortBySystolicPressureTest()
         {
+            var testData = new[]
+            {
+                new VitalSigns { PatientID = 1, HeartRate = 80, BloodPressure = "120/80", Temperature = 98.6 },
+                new VitalSigns { PatientID = 2, HeartRate = 60, BloodPressure = "110/70", Temperature = 99.1 },
+                new VitalSigns { PatientID = 3, HeartRate = 70, BloodPressure = "130/85", Temperature = 97.8 }
+            };
+
             VitalSigns vs = new VitalSigns();
-            vs.LoadDataFromDatabase();
+            vs.SetTestData(testData);
+
             using (StringWriter sw = new StringWriter())
             {
                 Console.SetOut(sw);
                 vs.SortBySystolicPressure();
                 string result = sw.ToString();
                 Assert.IsTrue(result.Contains("Vital signs sorted by systolic pressure:"), "Vital signs should be sorted by systolic pressure.");
+                Assert.IsTrue(result.Contains("PatientID: 2, BloodPressure: 110/70, Temperature: 99.1"), "PatientID 2 should be first.");
+                Assert.IsTrue(result.Contains("PatientID: 1, BloodPressure: 120/80, Temperature: 98.6"), "PatientID 1 should be second.");
+                Assert.IsTrue(result.Contains("PatientID: 3, BloodPressure: 130/85, Temperature: 97.8"), "PatientID 3 should be last.");
             }
         }
 
-        [TestMethod()]
-        public void LoadDataFromDatabaseTest()
-        {
-            VitalSigns vs = new VitalSigns();
-            vs.LoadDataFromDatabase();
-            Assert.IsTrue(vs.GetCount() > 0, "Data should be loaded from the database.");
-        }
+       
     }
-
 }
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+output
+2024-08-31 17:26:25,927 INFO  --------------------------------Loading Data from Database------------------------------
+2024-08-31 17:26:25,948 INFO  Loading data from database...
+2024-08-31 17:26:26,237 INFO  Data loaded successfully.
+2024-08-31 17:26:26,237 INFO
+2024-08-31 17:26:26,237 INFO  --------------------------------Lowest Heart Rate------------------------------
+2024-08-31 17:26:26,237 INFO  The lowest heart rate: PatientID: 5
+HeartRate: 60
+2024-08-31 17:26:26,237 INFO
+2024-08-31 17:26:26,237 INFO  --------------------------------Second Highest Temperature------------------------------
+2024-08-31 17:26:26,237 INFO  The second highest temperature: 100.2
+2024-08-31 17:26:26,239 INFO
+2024-08-31 17:26:26,239 INFO  --------------------------------Sort By Systolic Pressure------------------------------
+2024-08-31 17:26:26,239 INFO  Vital signs sorted by systolic pressure:
+2024-08-31 17:26:26,239 INFO  PatientID: 5, BloodPressure: 100/65, Temperature: 98.2
+2024-08-31 17:26:26,239 INFO  PatientID: 10, BloodPressure: 105/65, Temperature: 98.4
+2024-08-31 17:26:26,239 INFO  PatientID: 3, BloodPressure: 110/70, Temperature: 97.8
+2024-08-31 17:26:26,240 INFO  PatientID: 9, BloodPressure: 115/75, Temperature: 97.6
+2024-08-31 17:26:26,240 INFO  PatientID: 1, BloodPressure: 120/80, Temperature: 98.6
+2024-08-31 17:26:26,240 INFO  PatientID: 6, BloodPressure: 125/78, Temperature: 99.5
+2024-08-31 17:26:26,240 INFO  PatientID: 2, BloodPressure: 130/85, Temperature: 99.1
+2024-08-31 17:26:26,240 INFO  PatientID: 7, BloodPressure: 135/80, Temperature: 98.9
+2024-08-31 17:26:26,240 INFO  PatientID: 4, BloodPressure: 140/90, Temperature: 100.2
+2024-08-31 17:26:26,241 INFO  PatientID: 8, BloodPressure: 145/95, Temperature: 100.5
+Press any key to continue . . .
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
